@@ -1,0 +1,225 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{%static 'myapp/reference/css/mine.css'%}">
+
+<nav>
+    <div class="logo"><a href="http://www.yangqq.com">Dragon-L BLOG</a></div>
+    <h2 id="mnavh"><span class="navicon"></span></h2>
+        <ul id="starlist">
+      <li><a href="{% url 'index'%}">网站首页</a></li>
+      <li><a href="{% url 'list'%}"">博客日记</a></li>
+      <li><a href="{% url 'fengmian'%}"">学无止境</a>
+      </li>
+      <li><a href="{% url 'time'%}"">时间轴</a></li>
+      <li><a href="{% url 'about'%}"">关于我</a></li>
+      <li class="menu" ><a href="javascript:;">
+        个人认证
+      </a>
+        <ul class="sub" id='auth'>
+          <li><a href="javascript:;" class="current" do='login'>登录</a></li>
+          <li><a href="javascript:;" do='register'>注册</a></li>
+       
+          <!-- <li><a href="javascript:;" do='register'>注册</a></li> -->
+          <li><a href="javascript:;" do='logout'>退出</a></li>   <li><a href="javascript:;" do='retireve'>找回密码</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="searchbox">
+    <div id="search_bar" class="search_bar">
+      <form  id="searchform" action="/list/" method="post" name="searchform">
+        <input class="input" placeholder="想搜点什么呢.." type="text" name="keyboard" id="keyboard">
+        <input type="hidden" name="show" value="title" />
+        <input type="hidden" name="tempid" value="1" />
+        <input type="hidden" name="tbname" value="news">
+        <input type="hidden" name="Submit" value="搜索" />
+        <p class="search_ico"> <span></span></p>
+      </form>
+     </div> 
+    </div>
+</nav>
+
+<div class="ui-dialog" id="dialogMove" onselectstart='return false;'>
+    <div class="ui-dialog-title" id="dialogDrag"  onselectstart="return false;" >
+        <span>欢迎-登录</span>
+        <a class="ui-dialog-closebutton" href="javascript:hideDialog();"></a>
+    </div>
+    <div class="ui-dialog-content">
+        <div class="ui-dialog-l40 ui-dialog-pt15">
+            <input id="account" class="ui-dialog-input ui-dialog-input-username" type="input" placeholder="手机/邮箱/用户名" />
+        </div>
+        <div class="ui-dialog-l40 ui-dialog-pt15">
+            <input class="ui-dialog-input ui-dialog-input-password"  placeholder="密码" type="password" />
+        </div>
+        <div class="ui-dialog-l00 ui-dialog-pt15" >
+          <input type="" id="codeInput" class="ui-dialog-input cinput" placeholder="验证码">
+          <span class="validate" id="code" title="看不清？换一张"></span>
+        </div>
+
+        <div>
+            <span class="ui-dialog-submit">登录</span>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="ui-mask" id="mask" onselectstart="return false"></div>   
+<script src="{% static 'myapp/reference/js/jquery.min.js' %}" ></script>
+<script type="text/javascript" src="{%static 'myapp/mine/mine.js'%}"></script>
+
+
+<script type="text/javascript">
+
+    changeImg()
+    function changeImg(){
+      // 声明一个变量用于存储生成的验证码
+      document.getElementById('code').onclick = changeImg;
+        // 验证码组成库
+        var arrays=new Array(  
+            '1','2','3','4','5','6','7','8','9','0',  
+            'a','b','c','d','e','f','g','h','i','j',  
+            'k','l','m','n','o','p','q','r','s','t',  
+            'u','v','w','x','y','z',  
+            'A','B','C','D','E','F','G','H','I','J',  
+            'K','L','M','N','O','P','Q','R','S','T',  
+            'U','V','W','X','Y','Z'               
+        ); 
+        // 重新初始化验证码
+        code ='';
+        // 随机从数组中获取四个元素组成验证码
+        for(var i = 0; i<6; i++){
+            // 随机获取一个数组的下标
+            var r = parseInt(Math.random()*arrays.length);
+            code += arrays[r];
+        }
+        // 验证码写入span区域
+        document.getElementById('code').innerHTML = code;
+
+    }
+    // 验证验证码
+    function check(){
+        var error;
+        // 获取用户输入的验证码
+        var codeInput = document.getElementById('codeInput').value;
+        if(codeInput.toLowerCase() == code.toLowerCase()){
+   
+            return true;
+        }else{
+            error = '验证码错误,请重新输入！';
+
+            document.getElementById('codeInput').value = error;
+            $('#codeInput').css('color','red')
+            $("#codeInput").focus(function(){
+              $(this).val('')
+              $(this).css('color','#c1c1c1')
+          });
+
+            return false;
+        }
+    }
+
+    function verify(url,errormsg){
+
+      $.post({
+        url:url,
+        dataType:"text",
+        data:{
+          'account':$('.ui-dialog-input-username').val(),
+          'password':$('.ui-dialog-input-password').val()
+        },
+        success:function(resp){
+
+          if(resp==200){
+
+          // 登录验证成功之后刷新页面
+          window.location.reload()
+          }else{
+            // errormsg = "用户名或密码错误"
+            document.getElementById('account').value = errormsg;
+            $('#account').css('color','red')
+            $("#account").focus(function(){
+              $(this).val('')
+              $(this).css('color','#c1c1c1')
+            })
+      
+        }
+        },
+        error:function(er){
+          alert(er)
+
+        }
+
+      })
+      
+    }
+
+  $(document).ready(function(){
+      var url = null
+      var errormsg = null
+
+      var $sel = $("#auth").find('a')
+      $sel.on('click',function(){
+        var act = $(this).attr("do")
+        
+        if(act == "login"){
+          // 用户登录
+          showDialog()
+          $(".ui-dialog-title").find("span").text("欢迎-登录")
+          $('.ui-dialog-input-username').val('')
+          $('.ui-dialog-input-password').val('')
+          $('#codeInput').val('')
+          $('.ui-dialog-input-username').attr("placeholder","手机号/邮箱/用户名")
+          $(".ui-dialog-submit").text("登录")
+        }else if(act == "register"){
+          // 注册账号
+          showDialog();
+
+          $(".ui-dialog-title").find("span").text("欢迎-注册")
+          $('.ui-dialog-input-username').val('')
+          $('.ui-dialog-input-password').val('')
+          $('#codeInput').val('')
+          $('.ui-dialog-input-username').attr("placeholder","手机号/邮箱")
+          $(".ui-dialog-submit").text("注册")
+        }else if (act == "retireve"){
+          // 找回密码
+          showDialog()
+          $(".ui-dialog-title").find("span").text("找回密码")
+          $('.ui-dialog-input-username').val('')
+          $('.ui-dialog-input-password').val('')
+          $('#codeInput').val('')
+          $('.ui-dialog-input-username').attr("placeholder","手机号/邮箱")
+          $(".ui-dialog-submit").text("提交")
+          
+       }else{
+       //退出
+        url = "/logout/"
+        errormsg = "退出成功"
+        verify(url,errormsg)
+      }
+      })
+
+     var $Submit = $(".ui-dialog-submit")
+     $Submit.on('click',function(){
+        var desc = $(this).text()
+        if(desc == "登录"){
+         url = "/login/"
+         errormsg = "用户名或密码错误"
+          check()
+          verify(url,errormsg)
+
+        } else if(desc == "注册"){
+          url = "/register/"
+          errormsg = "账号已存在或不合法"
+          check()
+
+          verify(url,errormsg)
+
+        }else if(desc == "提交"){
+          url = "/retrieve/"
+          errormsg = "修改失败,用户名或不存在"
+          check()
+          verify(url,errormsg)
+        }
+     })
+    })
+</script>

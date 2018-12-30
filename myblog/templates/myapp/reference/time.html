@@ -1,0 +1,52 @@
+{% load staticfiles %}
+{% load utils %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>首页_杨青个人博客 - 一个站在web前端设计之路的女技术员个人博客网站</title>
+<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'myapp/reference/css/base.css' %} " rel="stylesheet">
+<link href="{% static 'myapp/reference/css/time.css' %} " rel="stylesheet">
+<link href="{% static 'myapp/reference/css/m.css' %} " rel="stylesheet">
+
+</head>
+<body>
+<header class="header-navigation" id="header">
+{% include 'myapp/reference/nav.html' %}
+</header>
+<article>
+
+  {%if posts|length > 0 %}
+  <div class="timebox">
+    <ul>
+      {%for post in posts%}
+        <li>
+          <span>
+          {{post.publish_time| datetimeformat}}</span>
+          <i>
+            <a href="/detail/?pid={{post.id}}">{{post.title}}</a>
+          </i>
+        </li>
+      {%endfor%}
+          <!-- 分页 -->
+    {%include 'myapp/reference/pagination.html'%}
+    {%else%}
+      <h1>Sorry,there is no any post that you want!</h1>
+{%endif%}
+    
+    </ul>
+  </div>
+</article>
+{% include 'myapp/reference/copyright.html' %}
+<a href="#" class="cd-top">Top</a>
+
+<script src="{% static 'myapp/reference/js/scrollReveal.js' %} "></script>
+<script src="{% static 'myapp/reference/js/time.js' %} " ></script>
+<!--[if lt IE 9]>
+<script src="{% static 'myapp/reference/js/modernizr.js' %} "></script>
+<![endif]-->
+</body>
+</html>

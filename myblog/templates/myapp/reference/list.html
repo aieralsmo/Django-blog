@@ -1,0 +1,120 @@
+{% load staticfiles %}
+{% load utils %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>博客日记</title>
+<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'myapp/reference/css/base.css' %} " rel="stylesheet">
+<link href="{% static 'myapp/reference/css/m.css' %} " rel="stylesheet">
+<link href="{% static 'myapp/reference/css/index.css' %} " rel="stylesheet">
+
+</head>
+<body>
+<header class="header-navigation" id="header">
+{% include 'myapp/reference/nav.html' %}
+</header>
+<article>  
+  <main>
+{%if posts|length > 0 %}
+
+    {%for post in posts %}
+      <div class="blogs" data-scroll-reveal="enter bottom over 1s" >
+        <h3 class="blogtitle"><a href="/detail/?pid={{post.id}}" target="_blank">{{post.title}}</a></h3>
+        
+        {%if forloop.counter|divisibleby:2%}
+        <span class="blogpic"><a href="javascript:;" title=""><img src="{% static 'myapp/reference/images/1.jpg' %} " alt=""></a></span>
+        {%elif forloop.counter|divisibleby:3%}
+           <span class="bigpic"><a href="javascript:;" title=""><img src="{% static 'myapp/reference/images/1.jpg' %} " alt=""></a></span>
+        {%else%}
+        <span class="bplist"><a href="javascript:;" title="">
+        <li><img src="{% static 'myapp/reference/images/2.jpg' %} " alt=""></li>
+        <li><img src="{% static 'myapp/reference/images/3.jpg' %} " alt=""></li>
+        <li><img src="{% static 'myapp/reference/images/4.jpg' %} " alt=""></li>
+        </a></span>
+        {%endif%}
+        <p class="blogtext">{{post.content|prettify:'p'}}</p>
+        <div class="bloginfo">
+          <ul>
+            <li class="author"><a href="javascript:void(0);">{{post.author}}</a></li>
+            <li class="lmname"><a href="javascript:void(0);">{{post.tag}}</a></li>
+            <li class="timer">{{post.publish_time}}</li>
+            <li class="view"><span>662</span>已阅读</li>
+            <li class="like">{{post.point_up_num}}</li>
+          </ul>
+        </div>
+      </div>
+    {%endfor%}
+    <!-- 分页 -->
+    {%include 'myapp/reference/pagination.html'%}
+{%else%}
+  <h1>Sorry,there is no any post that you want!</h1>
+{%endif%}
+    
+  </main>
+  <aside class="r_box" >
+      
+      <div class="wdxc">
+        <h2>图文精选</h2>
+        <ul>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/7.jpg' %} "></a></li>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/8.jpg' %} "></a></li>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/9.jpg' %} "></a></li>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/10.jpg' %} "></a></li>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/11.jpg' %} "></a></li>
+          <li><a href="/"><img src="{% static 'myapp/reference/images/12.jpg' %} "></a></li>
+        </ul>
+      </div>
+
+      <div class="tuijian">
+        <h2 id="tab"><a href="#"class="current">点击排行</a><a href="#">站长推荐</a></h2>
+        
+     <div id="content">
+        <ul style="display:block;">
+          <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
+          <li><a href="/">【活动作品】柠檬绿兔小白个人博客模板</a></li>
+          <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
+          <li><a href="/">2014年度优秀个人博客评选活动</a></li>
+          <li><a href="/">你是什么人便会遇上什么人</a></li>
+          <li><a href="/">帝国cms 列表页调用子栏目，没有则不显示栏目名称</a></li>
+          <li><a href="/">第二届 优秀个人博客模板比赛参选活动</a></li>
+          <li><a href="/">个人博客模板《绅士》后台管理</a></li>
+        </ul>
+               
+        <ul>
+          <li><a href="/">个人博客，我为什么要用帝国cms？</a></li>
+          <li><a href="/">D设计师博客-一个热爱生活的设计师</a></li>
+          <li><a href="/">东轩博客，我看到了你的坚持！</a></li>
+          <li><a href="/">程序员创业，就得“豁得出去”！</a></li>
+          <li><a href="/">张建华 一个90后年轻站长！我们是对手亦是朋友！</a></li>
+          <li><a href="/">《奋斗电商》看知名微商如何做博客引流？</a></li>
+          <li><a href="/">《寻之旅》一个关于旅游，游记的个人博客</a></li>
+          <li><a href="/">【匆匆那些年】总结个人博客经历的这四年</a></li>
+        </ul>
+       </div>
+      </div>
+      <div class="guanzhu">
+        <h2>关注我 么么哒</h2>
+        <ul>
+          <img src="{% static 'myapp/reference/images/wxQR.jpg' %} ">
+        </ul>
+      </div>
+
+  </aside>
+</article>
+{% include 'myapp/reference/copyright.html' %}
+<a href="#" class="cd-top">Top</a>
+
+
+<script src="{% static 'myapp/reference/js/jquery.easyfader.min.js' %} "></script>
+<script src="{% static 'myapp/reference/js/hc-sticky.js' %} "></script>
+<script src="{% static 'myapp/reference/js/comm.js' %} "></script>
+<script src="{% static 'myapp/reference/js/scrollReveal.js' %} "></script>
+<!--[if lt IE 9]>
+<script src="{% static 'myapp/reference/js/modernizr.js' %} "></script>
+<![endif]-->
+</body>
+</html>

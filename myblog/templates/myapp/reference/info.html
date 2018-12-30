@@ -1,0 +1,141 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html>
+<head>
+
+
+<meta charset="utf8">
+<title>详情</title>
+<meta name="keywords" content="个人博客,杨青个人博客,个人博客模板,杨青" />
+<meta name="description" content="杨青个人博客，是一个站在web前端设计之路的女程序员个人网站，提供个人博客模板免费资源下载的个人原创网站。" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'myapp/reference/css/base.css' %}" rel="stylesheet">
+<link  rel="stylesheet" href="{% static 'myapp/reference/css/info.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/reference/css/info.css' %}">
+
+<!-- 文章里面的操链接样式 -->
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/bole/css/style.css' %}">
+<link rel="stylesheet" href="https://cdn.bootcss.com/prettify/r298/prettify.min.css" >
+
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/mine/css/github-v2.min.css' %}">
+<!--[if lt IE 9]>
+<script src="{% static 'myapp/reference/js/modernizr.js' %}"></script>
+<![endif]-->
+
+
+  <style type="text/css">
+    li.L0, li.L1, li.L2, li.L3,
+    li.L5, li.L6, li.L7, li.L8 {
+    list-style-type: decimal !important;
+  }
+  .entry pre{
+    width: auto;
+    height: auto;
+    border: 1px solid #f8e9e994 !important;
+
+  }
+
+  </style>
+</head>
+<body>
+<header class="header-navigation" id="header">
+{% include 'myapp/reference/nav.html' %}
+</header>
+<article>
+  <main>
+  <div class="infosbox">
+    <div class="newsview">
+      <h3 class="news_title">{{post.title}}</h3>
+   
+      <div class="tags"><a href="/" target="_blank">个人博客</a> &nbsp; <a href="/" target="_blank">小世界</a></div>
+      <div class="news_about"><strong>简介</strong>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。每天工作回家后就能访问自己的网站，一边听着音乐，一边写写文章。</div>
+
+      
+    <div class="news_con">{{post.content|safe}}</div>
+    <div id='talk'>
+    
+      <span title="点赞量">
+        <font id="point-num">{{ post.point_up_num }}</font> 赞
+      </span>
+      
+      <span title="收藏量">
+        <font id="mark-num">{{post.bookmark_num}}</font> 收藏
+      </span>
+     
+      <span title="评论量">
+        <font id="comment-num">{{count}}</font> 评论
+      </span>
+    </div>
+   
+    <span id="userhidden" style="display: none">{{request.session.user}}</span>
+    <span id="post_id" style="display: none">{{post.id}}</span>
+    <span id="tip"></span>
+
+    <div id='comment-box'>
+        <textarea placeholder="留下您宝贵的100字评论！" maxlength="100" id="comment-text"></textarea>
+        <br>
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <input type="button" id="clean" value="清空"> 
+        &emsp;&emsp;&emsp;&emsp;
+        <input type="button" id="add-up" value="评论">
+    </div>
+    <div class="nextinfo">
+      <p>上一篇：<a href="/detail/?pid={{bp.id}}">{{bp.title}}</a></p>
+      <p>下一篇：<a href="/detail/?pid={{np.id}}">{{np.title}}</a></p>
+    </div>
+    <div class="news_pl">
+      <h2>评论区</h2>
+      <ul>
+        {%for c in c_data%}
+        <li><strong>{{c.user}}</strong>&nbsp;<span style="color: silver;">&#10150;&#9997;</span><i><small>{{c.time}}</small></i><p style="color: #3690cf;">&emsp;&emsp;{{c.text}}</p></li>
+        <hr>
+        {%endfor%}
+      </ul>
+    </div>
+  </div>
+  </main>
+  <aside class="r_box" >
+
+       <div class="fenlei">
+        <h2>文章分类</h2>
+        <ul>
+          <li><a href="javascript:;">学无止境（33）</a></li>
+          <li><a href="javascript:;">日记（19）</a></li>
+          <li><a href="javascript:;">慢生活（520）</a></li>
+          <li><a href="javascript:;">美文欣赏（40）</a></li>
+        </ul>
+      </div>
+      <div class="cloud">
+        <h2>标签云</h2>
+        {%include 'myapp/reference/tag-cloud.html'%}
+      </div>
+
+      <div class="guanzhu">
+        <h2>扫码关注微信公众号</h2>
+        <ul>
+          <img src="{% static 'myapp/reference/images/wxQR.jpg' %}">
+        </ul>
+      </div>
+
+  </aside>
+  </article>
+{% include 'myapp/reference/copyright.html' %}
+
+<a href="javascript:void(0);" class="cd-top">Top</a>
+
+<script src="https://cdn.bootcss.com/prettify/r298/prettify.min.js"></script>
+<script src="{% static 'myapp/reference/js/jquery.easyfader.min.js' %}"></script>
+<script src="{% static 'myapp/reference/js/hc-sticky.js' %}"></script>
+<script src="{% static 'myapp/reference/js/scrollReveal.js' %}"></script>
+  
+<script type="text/javascript" src="{% static 'myapp/mine/info.js' %}"></script>
+<script type="text/javascript">
+    $(window).load(function(){
+    $("pre").addClass("prettyprint linenums");//如果其他地方也要用到pre，我们可以再加一个父标签的选择器来区分
+    prettyPrint();//代替body上的onload事件加载该方法
+  })
+
+</script>
+</body>
+</html>

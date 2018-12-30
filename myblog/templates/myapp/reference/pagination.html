@@ -1,0 +1,21 @@
+<div class="pagelist">
+      <a title="Total record">共{{posts.paginator.num_pages}}页</a>
+      <!-- 判断如果posts对象有上一页则渲染上一页 -->
+      {% if posts.has_previous %}  
+        <a href="?page={{ posts.previous_page_number }}">上一页</a>
+      {% endif %}
+      {% for page_number in posts.paginator.page_range %}
+        {%ifequal page_number posts.number %}
+        <a href="?page={{ page_number }} "><b>{{ page_number }}</b></a>
+
+        {%else%}
+        <a href="?page={{ page_number }}">{{ page_number }}</a>
+        {%endifequal%}
+       
+      {% endfor %} 
+
+      {% if posts.has_next %} 
+      <!-- 判断下一页 -->
+        <a href="?page={{ posts.next_page_number }}">下一页</a>
+      {% endif %}
+    </div>

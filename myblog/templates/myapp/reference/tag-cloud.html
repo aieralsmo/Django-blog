@@ -1,0 +1,15 @@
+{% load utils %}
+<ul>
+  <!--模板变量赋值=号两边不能有空格  -->
+
+  {%with tags=post.tag|tags_split %}
+   {%if tags %}
+	  {%for tag in tags %}
+	    <a href="/list/?tag={{tag}}" name="tag">{{tag}}</a>
+	  {%endfor%}
+	 {%else%}
+	 	<span>没有标签</span>
+	 {%endif%}
+  {%endwith%}
+
+</ul>
